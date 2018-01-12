@@ -5,6 +5,8 @@ import Link from 'next/link'
 import AddButton from '../components/AddButton.js'
 import Actions from '../components/Actions.js'
 
+import { Button } from 'semantic-ui-react'
+
 import fetch from 'isomorphic-unfetch'
 
  const Departments = (props) => (
@@ -18,6 +20,7 @@ import fetch from 'isomorphic-unfetch'
               <th>id</th>
               <th>Address</th>
               <th>Communication</th>
+              <th>Telephone</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -27,6 +30,7 @@ import fetch from 'isomorphic-unfetch'
               <td>{e.id}</td>
               <td>{e.address}</td>
               <td>{e.communication}</td>
+              <td>{e.telephone}</td>
               <td>
                 <Actions _id={e.id} Entity="Department"/>
               </td>
@@ -35,6 +39,9 @@ import fetch from 'isomorphic-unfetch'
           </tbody>
         </table>
         <AddButton element="Department"/>
+        <Link href="/departmentsCabrio">
+          <Button>Departments with Cabrios List</Button>
+        </Link>
       </div>
     </Layout>
   </App>
@@ -46,7 +53,8 @@ Departments.getInitialProps = async function() {
   departments {
     id,
     communication,
-    address
+    address,
+    telephone
   }
 }`
   }

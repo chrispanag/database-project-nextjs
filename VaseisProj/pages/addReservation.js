@@ -86,7 +86,7 @@ class FormReservation extends Component {
           options={this.props.vehicles.map(d => {return {key: d.id, text: `${d.brand} ${d.model}`, value: d.id}})} onChange={this.handleChange} fluid
         />
         <Form.Select name="customer_id" placeholder="Customer" label="Customer"
-          options={this.props.customers.map(d => {return {key: d.id, text: d.vat, value: d.id}})} onChange={this.handleChange} fluid
+          options={this.props.customers.map(d => {return {key: d.id, text: d.name, value: d.id}})} onChange={this.handleChange} fluid
         />
         <Form.Select name="employee_id" placeholder="Employee" label="Employee"
           options={this.props.employees.map(d => {return {key: d.id, text: d.name, value: d.id}})} onChange={this.handleChange} fluid
@@ -118,6 +118,7 @@ addReservation.getInitialProps = async function() {
     `query {
       customers {
         id,
+        name,
         vat
       },
       vehicles {

@@ -7,28 +7,32 @@ import Actions from '../components/Actions.js'
 
 import fetch from 'isomorphic-unfetch'
 
- const Leases = (props) => (
+import * as _ from 'lodash'
+
+ const DepartmentsCabrio = (props) => (
   <App>
     <Layout>
     <div className="ui center aligned content container">
-      <h2 className="ui header">Leases List</h2>
+      <h2 className="ui header">Departments with Cabrios List</h2>
         <table className="ui celled table">
           <thead>
             <tr>
               <th>id</th>
-              <th>Start Date</th>
-              <th>End Date</th>
+              <th>Address</th>
+              <th>Communication</th>
+              <th>Telephone</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-          {props.leases.map(l => (
+          {props.vehicles.map(e => (
             <tr>
-              <td>{l.id}</td>
-              <td>{l.date_start}</td>
-              <td>{l.date_end}</td>
+              <td>{e.id}</td>
+              <td>{e.address}</td>
+              <td>{e.communication}</td>
+              <td>{e.telephone}</td>
               <td>
-                <Actions _id={l.id} Entity="Lease"/>
+                <Actions _id={e.id} Entity="Department"/>
               </td>
             </tr>
           ))}
@@ -39,13 +43,17 @@ import fetch from 'isomorphic-unfetch'
   </App>
 )
 
-Leases.getInitialProps = async function() {
+DepartmentsCabrio.getInitialProps = async function() {
   var body = {query:
     `query {
-  leases {
+  vehiclesCabrio {
     id,
-    date_start,
-    date_end
+    department {
+      id,
+      address,
+      communication
+      telephone
+    }
   }
 }`
   }
@@ -58,7 +66,9 @@ Leases.getInitialProps = async function() {
   console.log(data);
   console.log(`Show data fetched. Count: ${data.length}`)
 
-  return {leases: data.data.leases}
+  var departments = _.map(data.data.vehiclesCabrio, d => d.department)
+  console.log(departments);
+  return {vehicles: _.uniq(departments)}
 }
 
-export default Leases
+export default DepartmentsCabrio

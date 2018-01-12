@@ -6,13 +6,13 @@ import Actions from '../components/Actions.js'
 
 import fetch from 'isomorphic-unfetch'
 
-import { Icon, Label, Menu, Table, Button} from 'semantic-ui-react'
+import { Icon, Label, Menu, Table } from 'semantic-ui-react'
 
  const Vehicles = (props) => (
   <App>
     <Layout>
     <div className="ui center aligned content container">
-      <h2 className="ui header">Vehicles List</h2>
+      <h2 className="ui header">Vehicles Sorted</h2>
         <Table celled padded>
           <Table.Header>
             <Table.Row>
@@ -23,6 +23,7 @@ import { Icon, Label, Menu, Table, Button} from 'semantic-ui-react'
               <Table.HeaderCell rowSpan='2'>Cubism</Table.HeaderCell>
               <Table.HeaderCell rowSpan='2'>Kilometers</Table.HeaderCell>
               <Table.HeaderCell rowSpan='2'>Next Service</Table.HeaderCell>
+              <Table.HeaderCell rowSpan='2'>Insurance Expiration</Table.HeaderCell>
               <Table.HeaderCell colSpan='2'>Department</Table.HeaderCell>
               <Table.HeaderCell rowSpan='2'>Actions</Table.HeaderCell>
             </Table.Row>
@@ -41,6 +42,7 @@ import { Icon, Label, Menu, Table, Button} from 'semantic-ui-react'
               <Table.Cell>{v.cubism}</Table.Cell>
               <Table.Cell>{v.km}</Table.Cell>
               <Table.Cell>{v.service_date}</Table.Cell>
+              <Table.Cell>{v.ins_expiration}</Table.Cell>
               <Table.Cell>{v.department.id}</Table.Cell>
               <Table.Cell>{v.department.address}</Table.Cell>
               <Table.Cell>
@@ -51,9 +53,6 @@ import { Icon, Label, Menu, Table, Button} from 'semantic-ui-react'
           </Table.Body>
         </Table>
         <AddButton element="Vehicle"/>
-        <Link href="/vehiclesSorted">
-          <Button>Sorted By Insurance Expiration</Button>
-        </Link>
       </div>
     </Layout>
   </App>
@@ -62,7 +61,7 @@ import { Icon, Label, Menu, Table, Button} from 'semantic-ui-react'
 Vehicles.getInitialProps = async function() {
   var body = {query:
     `query {
-  vehicles {
+  vehiclesSorted {
     id,
     license_plate,
     year_bought,
@@ -91,7 +90,7 @@ Vehicles.getInitialProps = async function() {
   console.log(data);
   console.log(`Show data fetched. Count: ${data.length}`)
 
-  return {vehicles: data.data.vehicles}
+  return {vehicles: data.data.vehiclesSorted}
 }
 
 export default Vehicles

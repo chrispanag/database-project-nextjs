@@ -36,6 +36,14 @@ module.exports = () => {
           })
         });
       },
+      vehiclesCabrio(root) {
+        require('./Models/department');
+        return Vehicle.where('type', "cabrio").fetchAll({withRelated: ['department']}).then(col => col.serialize());
+      },
+      vehiclesSorted(root) {
+        require('./Models/department');
+        return Vehicle.fetchAll({withRelated: ['department']}).then(col => _.orderBy(col.serialize(), ['ins_expiration'], ['desc']));
+      },
       vehicle(root, {id}) {
         return Vehicle.where('id', id).fetch({withRelated: ['department']}).then(v => v.attributes);
       },
@@ -119,7 +127,7 @@ module.exports = () => {
       // DEPARTMENTS
       createDepartment(root, {input}) {
         var d = new Department(input);
-        return d.save.then((row) => {
+        return d.save().then((row) => {
           return Department.fetchAll();;
         })
         .catch(err => {

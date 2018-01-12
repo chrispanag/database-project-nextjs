@@ -12,7 +12,9 @@ module.exports = [`
     reservation: Reservation,
     reservations: [Reservation],
     customer: Customer,
-    customers: [Customer]
+    customers: [Customer],
+    vehiclesCabrio: [Vehicle]
+    vehiclesSorted: [Vehicle]
   }
 
 
@@ -73,13 +75,15 @@ module.exports = [`
 
   input DepartmentInput {
     communication: String,
-    address: String
+    address: String,
+    telephone: String
   }
 
   type Department {
     id: ID!,
     communication: String,
     address: String,
+    telephone: String,
     vehicles: [Vehicle],
     employees: [Employee]
   }
