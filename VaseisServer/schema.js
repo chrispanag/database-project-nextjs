@@ -80,7 +80,8 @@ module.exports = [`
     id: ID!,
     communication: String,
     address: String,
-    vehicles: [Vehicle]
+    vehicles: [Vehicle],
+    employees: [Employee]
   }
 
   type Employee {

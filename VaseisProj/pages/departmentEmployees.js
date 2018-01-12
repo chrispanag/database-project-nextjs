@@ -9,13 +9,17 @@ import { Button } from 'semantic-ui-react'
 
 import fetch from 'isomorphic-unfetch'
 
- const Employees = (props) => (
+ const departmentEmployees = (props) => (
   <App>
     <Layout>
     <div className="ui center aligned content container">
-      <h2 className="ui header">Employees List</h2>
+      <h3 className="ui header"> Grouped Employees by Department</h3>
+      {props.departments.map(d => (
         <table className="ui celled table">
           <thead>
+            <tr>
+              <th colSpan='6'>{d.id}</th>
+            </tr>
             <tr>
               <th>id</th>
               <th>Full Name</th>
@@ -26,7 +30,7 @@ import fetch from 'isomorphic-unfetch'
             </tr>
           </thead>
           <tbody>
-          {props.employees.map(e => (
+          {d.employees.map(e => (
             <tr>
               <td>{e.id}</td>
               <td>{e.name}</td>
@@ -40,24 +44,24 @@ import fetch from 'isomorphic-unfetch'
           ))}
           </tbody>
         </table>
-        <AddButton element="Employee"/>
-        <Link href='/departmentEmployees'>
-          <Button>Group Employees by Department</Button>
-        </Link>
+      ))}
       </div>
     </Layout>
   </App>
 )
 
-Employees.getInitialProps = async function() {
+departmentEmployees.getInitialProps = async function() {
   var body = {query:
     `query {
-  employees {
+  departments {
     id,
-    ssn,
-    name,
-    address,
-    license
+    employees {
+      id,
+      name,
+      ssn,
+      address,
+      license
+    }
   }
 }`
   }
@@ -70,7 +74,7 @@ Employees.getInitialProps = async function() {
   console.log(data);
   console.log(`Show data fetched. Count: ${data.length}`)
 
-  return {employees: data.data.employees}
+  return {departments: data.data.departments}
 }
 
-export default Employees
+export default departmentEmployees

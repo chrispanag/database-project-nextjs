@@ -40,10 +40,14 @@ module.exports = () => {
         return Vehicle.where('id', id).fetch({withRelated: ['department']}).then(v => v.attributes);
       },
       department(root, {id}) {
-        return Department.where('id', id).fetch().then(d => d.attributes);
+        require('./Models/employee');
+        require('./Models/vehicle');
+        return Department.where('id', id).fetch({withRelated: ['employee', 'vehicle']}).then(d => d.attributes);
       },
       departments(root) {
-        return Department.fetchAll().then(col => col.serialize());
+        require('./Models/employee');
+        require('./Models/vehicle');
+        return Department.fetchAll({withRelated: ['employees']}).then(col => col.serialize());
       },
       employee(root, {id}) {
         return Employee.where('id', id).fetch().then(e => e.attributes);
