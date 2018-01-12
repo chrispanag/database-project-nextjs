@@ -10,7 +10,9 @@ const layoutStyle = {
 const Layout = (props) => (
   <div style={layoutStyle}>
     <Header />
+    <div className="ui divider"></div>
     {props.children}
+    <div className="ui divider"></div>
     <Footer />
   </div>
 )

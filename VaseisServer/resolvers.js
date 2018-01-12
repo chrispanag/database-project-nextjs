@@ -1,48 +1,52 @@
 const moment = require('moment');
 
-module.exports = db => {
+let Department = require('./Models/department');
+let Vehicle = require('./Models/vehicle');
+let Employee = require('./Models/employee');
+let Lease = require('./Models/lease');
+let Customer = require('./Models/customer');
+let Reservation = require('./Models/reservation');
+
+module.exports = () => {
   return {
     Query: {
       // Returns all vehicles
       vehicles(root) {
-        return db.select('*').from('VEHICLES').then(rows => {
-          return rows;
-        });
+        require('./Models/department');
+        return Vehicle.fetchAll({withRelated: ['department']}).then(col => col.serialize());
       },
       vehicle(root, {id}) {
-        return db.select('*').from('VEHICLES').where('id', id).then(rows => {
-          return rows[0];
-        });
+        return Vehicle.where('id', id).fetch({withRelated: ['department']}).then(v => v.attributes);
       },
       department(root, {id}) {
-        return db.select('*').from('DEPARTMENTS').where('id', id).then(rows => {
-          return rows[0];
-        });
+        return Department.where('id', id).fetch().then(d => d.attributes);
       },
       departments(root) {
-        return db.select('*').from('DEPARTMENTS').then(rows => {
-          return rows;
-        });
+        return Department.fetchAll().then(col => col.serialize());
       },
       employee(root, {id}) {
-        return db.select('*').from('EMPLOYEES').where('id', id).then(rows => {
-          return rows[0];
-        });
+        return Employee.where('id', id).fetch().then(e => e.attributes);
       },
       employees(root) {
-        return db.select('*').from('EMPLOYEES').then(rows => {
-          return rows;
-        });
+        return Employee.fetchAll().then(col => col.serialize());
       },
       lease(root, {id}) {
-        return db.select('*').from('LEASES').where('id', id).then(rows => {
-          return rows[0];
-        });
+        return Lease.where('id', id).fetch().then(l => l.attributes);
       },
       leases(root) {
-        return db.select('*').from('LEASES').then(rows => {
-          return rows;
-        });
+        return Lease.fetchAll().then(col => col.serialize());
+      },
+      reservation(root, {id}) {
+        return Reservation.where('id', id).fetch().then(l => l.attributes);
+      },
+      reservations(root) {
+        return Reservation.fetchAll().then(col => col.serialize());
+      },
+      customer(root, {id}) {
+        return Customer.where('id', id).fetch().then(l => l.attributes);
+      },
+      customers(root) {
+        return Customer.fetchAll().then(col => col.serialize());
       }
     },
     Mutation: {
@@ -51,8 +55,9 @@ module.exports = db => {
         input.year_bought = moment(input.year_bought).year();
         input.ins_expiration = moment(input.ins_expiration).format('YYYY/MM/DD HH:mm:ss');
         input.service_date = moment(input.service_date).format('YYYY/MM/DD HH:mm:ss');
-        return db.table('VEHICLES').insert(input).returning("*").then(() => {
-          db.select('*').from('VEHICLES').where('license_plate', input.license_plate).then(rows => rows[0])
+        var v = new Vehicle(input);
+        return v.save().then(() => {
+          return Vehicle.query({where: {license_plate: input.license_plate}}).then(rows => rows[0])
         })
         .catch(err => {
           if (err.errno == 23000) {
@@ -64,14 +69,15 @@ module.exports = db => {
         });
       },
       deleteVehicle(root, {id}) {
-        return db.table('VEHICLES').where('id', id).del().then(() => {
-            return db.select('*').from('VEHICLES');
+        return (new Vehicle({id})).destroy().then(() => {
+          return Vehicle.fetchAll();
         });
       },
       // EMPLOYEES
       createEmployee(root, {input}) {
-        return db.table('EMPLOYEES').insert(input).returning("*").then(() => {
-          return db.select('*').from('EMPLOYEES').where('ssn', input.ssn).then(rows => rows[0]);
+        var e = new Employee(input);
+        return e.save().then(() => {
+          return Employee.fetchAll();
         })
         .catch(err => {
           if (err.errno == 23000) {
@@ -81,14 +87,15 @@ module.exports = db => {
         });
       },
       deleteEmployee(root, {id}) {
-        return db.table('EMPLOYEES').where('id', id).del().then(() => {
-            return db.select('*').from('EMPLOYEES');
+        return (new Employee({id})).destroy().then(() => {
+          return Employee.fetchAll();
         });
       },
       // DEPARTMENTS
       createDepartment(root, {input}) {
-        return db.table('DEPARTMENTS').insert(input).returning("*").then((row) => {
-          return db.select('*').from('DEPARTMENTS').where('id', row[0]).then(rows => rows[0]);
+        var d = new Department(input);
+        return d.save.then((row) => {
+          return Department.fetchAll();;
         })
         .catch(err => {
           if (err.errno == 23000) {
@@ -99,7 +106,25 @@ module.exports = db => {
       },
       deleteDepartment(root, {id}) {
         return db.table('DEPARTMENTS').where('id', id).del().then(() => {
-            return db.select('*').from('DEPARTMENTS');
+          return db.select('*').from('DEPARTMENTS');
+        });
+      },
+      // CUSTOMERS
+      createCustomer(root, {input}) {
+        var c = new Customer(input);
+        return c.save().then(row => {
+          return Customer.fetchAll();;
+        })
+        .catch(err => {
+          if (err.errno == 23000) {
+            // TODO: Should send data to the front here
+            console.log("Duplicate Entry!");
+          }
+        });
+      },
+      deleteCustomer(root, {id}) {
+        return (new Customer({id})).destroy().then(() => {
+          return Customer.fetchAll();
         });
       }
     }

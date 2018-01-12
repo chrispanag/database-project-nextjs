@@ -9,15 +9,6 @@ import fetch from 'isomorphic-unfetch'
     <Layout>
       <div className="ui center aligned content container">
         <p>NACars is a dummy company ;p</p>
-        <ul>
-      {props.employees.map((employee) => (
-        <li key={employee.id}>
-          <Link as={`/p/${employee.id}`} href={`/post?id=${employee.id}`}>
-            <a>{employee.name}</a>
-          </Link>
-        </li>
-      ))}
-    </ul>
       </div>
     </Layout>
   </App>

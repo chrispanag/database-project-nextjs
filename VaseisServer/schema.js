@@ -7,17 +7,23 @@ module.exports = [`
     lease(id: ID!): Lease,
     leases: [Lease],
     department(id: ID!): Department,
-    departments: [Department]
+    departments: [Department],
+    reservation: Reservation,
+    reservations: [Reservation],
+    customer: Customer,
+    customers: [Customer]
   }
 
   type Mutation {
-    createVehicle(input: VehicleInput): Vehicle,
+    createVehicle(input: VehicleInput): [Vehicle],
     updateVehicle(id: ID!, input: VehicleInput): Vehicle,
     deleteVehicle(id: ID!): [Vehicle],
-    createEmployee(input: EmployeeInput): Employee,
+    createEmployee(input: EmployeeInput): [Employee],
     deleteEmployee(id: ID!): [Employee],
     createDepartment(input: DepartmentInput): Department,
-    deleteDepartment(id: ID!): [Department]
+    deleteDepartment(id: ID!): [Department],
+    createCustomer(input: CustomerInput): [Customer],
+    deleteCustomer(id: ID!): [Customer],
   }
 
   input VehicleInput {
@@ -31,14 +37,21 @@ module.exports = [`
     hp: Int,
     cubism: Int,
     km: Int,
-    service_date: String
+    service_date: String,
+    department_id: ID!
   }
 
   input EmployeeInput {
     ssn: String,
     name: String,
     address: String,
-    license: String
+    license: String,
+    department_id: ID!
+  }
+
+  input CustomerInput {
+    vat: String,
+    address: String
   }
 
   input DepartmentInput {
@@ -49,7 +62,8 @@ module.exports = [`
   type Department {
     id: ID!,
     communication: String,
-    address: String
+    address: String,
+    vehicles: [Vehicle]
   }
 
   type Employee {
@@ -57,12 +71,21 @@ module.exports = [`
     ssn: String,
     name: String,
     address: String,
-    license: String
+    license: String,
+    department: Department
+  }
+
+  type Customer {
+    id: ID!,
+    vat: String,
+    address: String,
+    date_registered: String
   }
 
   type Lease {
     id: ID!,
-    date: String
+    date_start: String,
+    date_end: String
   }
 
   type Vehicle {
@@ -77,7 +100,18 @@ module.exports = [`
     hp: Int,
     cubism: Int,
     km: Int,
-    service_date: String
+    service_date: String,
+    department: Department
+  }
+
+  type Reservation {
+    id: ID!,
+    prepaid: Boolean,
+    date_start: String,
+    date_end: String,
+    customer: Customer,
+    vehicle: Vehicle,
+    employee: Employee
   }
 
   schema {

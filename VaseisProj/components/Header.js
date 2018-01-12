@@ -6,15 +6,29 @@ const linkStyle = {
 
 const Header = () => (
   <div>
-    <div className="ui three item menu">
+    <div className="ui seven item menu">
         <Link  href="/">
           <a className="item" style={linkStyle}>Home</a>
         </Link>
-        <Link  href="/about">
-          <a className="item" style={linkStyle}>About</a>
+        <Link  href="/employees">
+          <a className="item" style={linkStyle}>Employees</a>
+        </Link>
+        <Link  href="/vehicles">
+          <a className="item" style={linkStyle}>Vehicles</a>
+        </Link>
+        <Link  href="/departments">
+          <a className="item" style={linkStyle}>Departments</a>
+        </Link>
+        <Link  href="/leases">
+          <a className="item" style={linkStyle}>Leases</a>
+        </Link>
+        <Link  href="/reservations">
+          <a className="item" style={linkStyle}>Reservations</a>
+        </Link>
+        <Link  href="/customers">
+          <a className="item" style={linkStyle}>Customers</a>
         </Link>
     </div>
-    <h1 className="ui center aligned header">NACars</h1>
     </div>
 )
 

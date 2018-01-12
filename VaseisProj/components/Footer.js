@@ -7,8 +7,7 @@ const linkStyle = {
 
 const Header = () => (
     <div className="ui center aligned vertical footer bottom segment row">
-        <p >Created by Christos P., Nikoletta K. and Athina S.</p>
-        <Stars />
+        <p ><i className="copyright icon"></i> 2018 || Created by Christos P., Nikoletta K. and Athina S.</p>
     </div>
 )
 
