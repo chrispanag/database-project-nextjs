@@ -23,38 +23,64 @@ class FormReservation extends Component {
   handleChange = (e, {name, value}) => this.setState({ [name]: value })
 
   handleSubmit = () => {
-    const { address, vat } = this.state;
+    var {
+      vehicle_id,
+      customer_id,
+      employee_id,
+      prepaid,
+      date_end,
+      date_start
+    } = this.state;
+
+    if (prepaid) {
+      prepaid = true;
+    } else {
+      prepaid = false;
+    }
 
     const body = {
       query:
         `mutation {
           createReservation (input: {
-            address: "${address}",
-            vat: "${vat}"
+            vehicle_id: "${vehicle_id}",
+            customer_id: "${customer_id}",
+            employee_id: "${employee_id}",
+            prepaid: ${prepaid},
+            date_end: "${date_end}",
+            date_start: "${date_start}"
           }) {
             id
           }
         }`
     }
+
     fetch('http://localhost:4000/graphql', {
   	  method: 'POST',
   	  body: JSON.stringify(body),
   	  headers: { 'Content-Type': 'application/json'}
     }).then(res => {
       const data = res.json()
-      Router.push(`/customers`);
+      Router.push(`/reservations`);
     })
   }
 
   render () {
      const {
-       address,
-       vat
+       vehicle_id,
+       customer_id,
+       employee_id,
+       prepaid,
+       date_end,
+       date_start
      } = this.state
 
      console.log(this.props);
     return (
       <Form onSubmit={this.handleSubmit}>
+      <Form.Group widths='equal'>
+        <Form.Input label="Start Date" name="date_start" onChange={this.handleChange} fluid/>
+        <Form.Input label="End Date" name="date_end" onChange={this.handleChange} fluid/>
+      </Form.Group>
       <Form.Group widths='equal'>
         <Form.Select name="vehicle_id" placeholder="Vehicle" label="Vehicle"
           options={this.props.vehicles.map(d => {return {key: d.id, text: `${d.brand} ${d.model}`, value: d.id}})} onChange={this.handleChange} fluid
@@ -66,6 +92,7 @@ class FormReservation extends Component {
           options={this.props.employees.map(d => {return {key: d.id, text: d.name, value: d.id}})} onChange={this.handleChange} fluid
         />
         </Form.Group>
+        <Form.Field label='Prepaid' name="prepaid" type="checkbox" control="input"/>
 
 
       <Form.Button content="Submit"/>
@@ -95,8 +122,13 @@ addReservation.getInitialProps = async function() {
       },
       vehicles {
         id,
-        brand
-        model
+        brand,
+        model,
+        reservations  {
+          id,
+          date_start,
+          date_end
+        }
       },
       employees {
         id,

@@ -17,6 +17,7 @@ import fetch from 'isomorphic-unfetch'
           <thead>
             <tr>
               <th>id</th>
+              <th>Name</th>
               <th>Address</th>
               <th>VAT</th>
               <th>Date Registered</th>
@@ -27,6 +28,7 @@ import fetch from 'isomorphic-unfetch'
           {props.customers.map(r => (
             <tr>
               <td>{r.id}</td>
+              <td>{r.name}</td>
               <td>{r.address}</td>
               <td>{r.vat}</td>
               <td>{r.date_registered}</td>
@@ -50,7 +52,8 @@ Customers.getInitialProps = async function() {
     id,
     address,
     vat,
-    date_registered
+    date_registered,
+    name
   }
 }`
   }

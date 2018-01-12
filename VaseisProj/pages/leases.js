@@ -16,7 +16,8 @@ import fetch from 'isomorphic-unfetch'
           <thead>
             <tr>
               <th>id</th>
-              <th>Date</th>
+              <th>Start Date</th>
+              <th>End Date</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -24,7 +25,8 @@ import fetch from 'isomorphic-unfetch'
           {props.leases.map(l => (
             <tr>
               <td>{l.id}</td>
-              <td>{l.date}</td>
+              <td>{l.date_start}</td>
+              <td>{l.date_end}</td>
               <td>
                 <Actions _id={l.id} Entity="Lease"/>
               </td>
@@ -32,7 +34,6 @@ import fetch from 'isomorphic-unfetch'
           ))}
           </tbody>
         </table>
-        <AddButton element="Lease"/>
       </div>
     </Layout>
   </App>

@@ -2,6 +2,7 @@ module.exports = [`
   type Query {
     vehicle(id: ID!): Vehicle
     vehicles: [Vehicle],
+    vehiclesAvailable(date_start: String, date_end: String): [Vehicle],
     employee(id: ID!): Employee,
     employees: [Employee]
     lease(id: ID!): Lease,
@@ -14,6 +15,7 @@ module.exports = [`
     customers: [Customer]
   }
 
+
   type Mutation {
     createVehicle(input: VehicleInput): [Vehicle],
     updateVehicle(id: ID!, input: VehicleInput): Vehicle,
@@ -24,7 +26,21 @@ module.exports = [`
     deleteDepartment(id: ID!): [Department],
     createCustomer(input: CustomerInput): [Customer],
     deleteCustomer(id: ID!): [Customer],
+    createReservation(input: ReservationInput): [Reservation],
+    deleteReservation(id: ID!): [Reservation],
+    leaseCar(id: ID!): [Reservation],
+    deleteLease(id: ID!): [Lease]
   }
+
+  input ReservationInput {
+    prepaid: Boolean,
+    date_start: String,
+    date_end: String,
+    customer_id: ID!,
+    vehicle_id: ID!,
+    employee_id: ID!
+  }
+
 
   input VehicleInput {
     license_plate: String,
@@ -51,6 +67,7 @@ module.exports = [`
 
   input CustomerInput {
     vat: String,
+    name: String,
     address: String
   }
 
@@ -79,6 +96,7 @@ module.exports = [`
     id: ID!,
     vat: String,
     address: String,
+    name: String,
     date_registered: String
   }
 
@@ -101,7 +119,8 @@ module.exports = [`
     cubism: Int,
     km: Int,
     service_date: String,
-    department: Department
+    department: Department,
+    reservations: [Reservation]
   }
 
   type Reservation {

@@ -3,6 +3,7 @@ import App from '../components/App.js'
 import Link from 'next/link'
 
 import AddButton from '../components/AddButton.js'
+import AddLease from '../components/addLease.js'
 
 import Actions from '../components/Actions.js'
 
@@ -18,22 +19,35 @@ import fetch from 'isomorphic-unfetch'
           <thead>
             <tr>
               <th>id</th>
-              <th>Address</th>
-              <th>Communication</th>
+              <th>Prepaid</th>
+              <th>Start Date</th>
+              <th>End Date</th>
               <th>Actions</th>
+              <th>New Lease</th>
             </tr>
           </thead>
           <tbody>
-          {props.reservations.map(r => (
-            <tr>
-              <td>{r.id}</td>
-              <td>{r.address}</td>
-              <td>{r.communication}</td>
-              <td>
-                <Actions _id={r.id} Entity="Reservation"/>
-              </td>
-            </tr>
-          ))}
+          {props.reservations.map(r => {
+            if (r.prepaid) {
+              r.prepaid = "true"
+            } else {
+              r.prepaid = "false"
+            }
+            return (
+              <tr>
+                <td>{r.id}</td>
+                <td>{r.prepaid}</td>
+                <td>{r.date_start}</td>
+                <td>{r.date_end}</td>
+                <td>
+                  <Actions _id={r.id} Entity="Reservation"/>
+                </td>
+                <td>
+                  <AddLease _id={r.id} />
+                </td>
+              </tr>
+            )
+          })}
           </tbody>
         </table>
         <AddButton element="Reservation"/>
